@@ -4,12 +4,13 @@ import java.awt.*;
 
 public class PlayerMissile extends Projectiles {
     double angle;
-    double speed = 2.0f;
+    double speed = 5.f;
 
     public PlayerMissile(Entity owner, double angle) {
         super(owner);
         this.startAbsPos = (Point) owner.absPos.clone();
         this.absPos = (Point) this.startAbsPos.clone();
+        this.collisionSize = new Point(10, 10);
         this.angle = angle;
     }
 
@@ -25,11 +26,6 @@ public class PlayerMissile extends Projectiles {
         absPos.x = (int) (startAbsPos.x + speed * currentMoveFactor * Math.cos(angle));
         absPos.y = (int) (startAbsPos.y + speed * currentMoveFactor * Math.sin(angle));
         currentMoveFactor++;
-    }
-
-    @Override
-    public void onCollideCallback() {
-
     }
 
     @Override

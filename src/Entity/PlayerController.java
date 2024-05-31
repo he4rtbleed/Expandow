@@ -5,14 +5,12 @@ import Utils.CoordinateConvertHelper;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PlayerController extends KeyAdapter implements MouseListener {
+public class PlayerController extends KeyAdapter implements MouseListener, MouseMotionListener {
     Player targetEntity;
 
     public PlayerController(Player entity) {
         this.targetEntity = entity;
     }
-
-
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -40,21 +38,17 @@ public class PlayerController extends KeyAdapter implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        PlayerMissile missile = new PlayerMissile(targetEntity,
-                CoordinateConvertHelper.GetAngleFromTwoPoints(targetEntity.absPos, e.getLocationOnScreen()));
-        EntityManager.addEntity(missile);
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        PlayerMissile missile = new PlayerMissile(targetEntity,
-                CoordinateConvertHelper.GetAngleFromTwoPoints(targetEntity.absPos, e.getLocationOnScreen()));
-        EntityManager.addEntity(missile);
+        targetEntity.mousePos = e.getLocationOnScreen(); //눌린경우 마우스 위치 업데이트
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        targetEntity.mousePos = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE); //떼진경우 마우스 위치 MAX, MAX 로 변경
     }
 
     @Override
@@ -64,6 +58,16 @@ public class PlayerController extends KeyAdapter implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        targetEntity.mousePos = e.getLocationOnScreen(); //눌린경우 마우스 위치 업데이트
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
 
     }
 }

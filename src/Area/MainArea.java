@@ -2,12 +2,22 @@ package Area;
 
 import Entity.Entity;
 import Entity.EntityManager;
+import Entity.Player;
 import Utils.Enums.Edge;
 import Utils.IntersectHelpers;
 
 import java.awt.*;
 
 public class MainArea extends Area {
+    private static MainArea instance;
+
+    public static MainArea getInstance() {
+        return instance;
+    }
+
+    public static void setInstance(MainArea instance) {
+        MainArea.instance = instance;
+    }
 
     boolean isInitialized = false;
 
@@ -52,36 +62,64 @@ public class MainArea extends Area {
             }
         }
 
-        //확장 로직
+        // 확장/축소 로직
+        boolean boundsChanged = false;
+
         if (accumulatedExpandAmount[Edge.BOTTOM.ordinal()] != 0) {
-            setBounds(absBounds.x, absBounds.y, absBounds.width, absBounds.height + accumulatedExpandAmount[Edge.BOTTOM.ordinal()]);
-            accumulatedExpandAmount[Edge.BOTTOM.ordinal()] = accumulatedExpandAmount[Edge.BOTTOM.ordinal()] < 0 ?
-                    Math.min(0, accumulatedExpandAmount[Edge.BOTTOM.ordinal()] + 10) :
-                    Math.max(0, accumulatedExpandAmount[Edge.BOTTOM.ordinal()] - 10);
+            absBounds.height += accumulatedExpandAmount[Edge.BOTTOM.ordinal()];
+            accumulatedExpandAmount[Edge.BOTTOM.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.BOTTOM.ordinal()]);
+            boundsChanged = true;
         }
         if (accumulatedExpandAmount[Edge.TOP.ordinal()] != 0) {
-            setBounds(absBounds.x, absBounds.y - accumulatedExpandAmount[Edge.TOP.ordinal()], absBounds.width, absBounds.height + accumulatedExpandAmount[Edge.TOP.ordinal()]);
-            accumulatedExpandAmount[Edge.TOP.ordinal()] = accumulatedExpandAmount[Edge.TOP.ordinal()] < 0 ?
-                    Math.min(0, accumulatedExpandAmount[Edge.TOP.ordinal()] + 10) :
-                    Math.max(0, accumulatedExpandAmount[Edge.TOP.ordinal()] - 10);
+            absBounds.y -= accumulatedExpandAmount[Edge.TOP.ordinal()];
+            absBounds.height += accumulatedExpandAmount[Edge.TOP.ordinal()];
+            accumulatedExpandAmount[Edge.TOP.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.TOP.ordinal()]);
+            boundsChanged = true;
         }
         if (accumulatedExpandAmount[Edge.LEFT.ordinal()] != 0) {
-            setBounds(absBounds.x - accumulatedExpandAmount[Edge.LEFT.ordinal()], absBounds.y, absBounds.width + accumulatedExpandAmount[Edge.LEFT.ordinal()], absBounds.height);
-            accumulatedExpandAmount[Edge.LEFT.ordinal()] = accumulatedExpandAmount[Edge.BOTTOM.ordinal()] < 0 ?
-                    Math.min(0, accumulatedExpandAmount[Edge.LEFT.ordinal()] + 10) :
-                    Math.max(0, accumulatedExpandAmount[Edge.LEFT.ordinal()] - 10);
+            absBounds.x -= accumulatedExpandAmount[Edge.LEFT.ordinal()];
+            absBounds.width += accumulatedExpandAmount[Edge.LEFT.ordinal()];
+            accumulatedExpandAmount[Edge.LEFT.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.LEFT.ordinal()]);
+            boundsChanged = true;
         }
         if (accumulatedExpandAmount[Edge.RIGHT.ordinal()] != 0) {
-            setBounds(absBounds.x, absBounds.y, absBounds.width + accumulatedExpandAmount[Edge.RIGHT.ordinal()], absBounds.height);
-            accumulatedExpandAmount[Edge.RIGHT.ordinal()] = accumulatedExpandAmount[Edge.RIGHT.ordinal()] < 0 ?
-                    Math.min(0, accumulatedExpandAmount[Edge.RIGHT.ordinal()] + 10) :
-                    Math.max(0, accumulatedExpandAmount[Edge.RIGHT.ordinal()] - 10);
+            absBounds.width += accumulatedExpandAmount[Edge.RIGHT.ordinal()];
+            accumulatedExpandAmount[Edge.RIGHT.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.RIGHT.ordinal()]);
+            boundsChanged = true;
         }
 
-        //
+        // 최소 크기 유지
+        if (absBounds.width < 300) {
+            absBounds.width = 300;
+        }
+        if (absBounds.height < 200) {
+            absBounds.height = 200;
+        }
+
+        if (boundsChanged) {
+            setBounds(absBounds.x, absBounds.y, absBounds.width, absBounds.height);
+        }
+
+        if (Player.getInstance() != null) {
+            g.setColor(Color.BLACK);
+            g.drawString("POINT: " + Player.getInstance().getPoint(), absBounds.x + 10, absBounds.y + 50);
+            g.drawString("HP: " + Player.getInstance().getHP() + "/" + Player.getInstance().getMaxHp(), absBounds.x + absBounds.width - 100, absBounds.y + 50);
+        }
+
+        // _g 가 swing 프레임의 그래픽 객체이고 img 는 따로 만든 비트맵
+        // img 비트맵은 모니터 크기와 같음
+        // 즉 swing 프레임에
         _g.drawImage(img, -absBounds.getLocation().x, -absBounds.getLocation().y, null);
 
         repaint();
+    }
+
+    private int adjustAmount(int amount) {
+        if (amount < 0) {
+            return Math.min(0, amount + 10);
+        } else {
+            return Math.max(0, amount - 10);
+        }
     }
 
     public void areaReducer() {
