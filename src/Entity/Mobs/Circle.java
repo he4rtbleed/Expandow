@@ -15,8 +15,8 @@ public class Circle extends Mobs {
     public void onTick() {
         long timeDiff = System.currentTimeMillis() - lastDashTick;
         if (timeDiff < 1000) {
-            double a = -0.000008;
-            speed = (float) (a * Math.pow((timeDiff - 500), 2) + 2.0);
+            double a = -0.000012;
+            speed = (float) (a * Math.pow((timeDiff - 500), 2) + 3.0);
         } else if (timeDiff > 1000 && timeDiff < 1500) {
             speed = 0;
         } else {

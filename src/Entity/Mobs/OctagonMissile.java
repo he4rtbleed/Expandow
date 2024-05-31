@@ -1,17 +1,20 @@
-package Entity;
+package Entity.Mobs;
+
+import Entity.Entity;
+import Entity.Projectiles;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-public class PlayerMissile extends Projectiles {
+public class OctagonMissile extends Projectiles {
     double angle;
-    double speed = 5.f;
+    double speed = 2.f;
 
-    public PlayerMissile(Entity owner, double angle) {
+    public OctagonMissile(Entity owner, double angle) {
         super(owner);
-        this.startAbsPos = (Point) owner.absPos.clone();
+        this.startAbsPos = (Point) owner.getAbsolutePosition().clone();
         this.absPos = (Point) this.startAbsPos.clone();
-        this.collisionSize = new Point(15, 5);
+        this.collisionSize = new Point(15, 15);
         this.angle = angle;
     }
 
@@ -32,23 +35,9 @@ public class PlayerMissile extends Projectiles {
     @Override
     public void onPaint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.black);
-
-        // 타원의 중심 좌표 계산
-        int centerX = absPos.x + collisionSize.x / 2;
-        int centerY = absPos.y + collisionSize.y / 2;
-
-        // AffineTransform을 사용하여 회전 적용
-        AffineTransform old = g2d.getTransform();
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(angle, centerX, centerY); // 회전 변환 설정
-
-        g2d.setTransform(transform);
+        g2d.setColor(Color.magenta);
 
         // 타원 그리기
         g2d.fillOval(absPos.x, absPos.y, collisionSize.x, collisionSize.y);
-
-        // 원래의 변환 상태로 복원
-        g2d.setTransform(old);
     }
 }

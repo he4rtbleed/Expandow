@@ -37,6 +37,9 @@ public class MainArea extends Area {
         requestFocus();
         setAutoRequestFocus(true);
 
+        updateAbsolutePositionOfArea();
+        updateWindowSize();
+
         isInitialized = true;
     }
 

@@ -35,6 +35,15 @@ public class EntityManager {
         return mobsList;
     }
 
+    public static List<Entity> getMobMissilesList() {
+        List<Entity> mobMissilesList = new ArrayList<Entity>();
+        for (Entity entity : entityList) {
+            if (entity instanceof Projectiles && ((Projectiles) entity).owner instanceof Mobs)
+                mobMissilesList.add(entity);
+        }
+        return mobMissilesList;
+    }
+
     public static void addEntity(Entity entity) {
         toAdd.add(entity);
     }

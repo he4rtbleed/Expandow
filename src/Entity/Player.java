@@ -107,6 +107,15 @@ public class Player extends Entity implements Movable {
                     break;
                 }
             }
+
+            for (Entity mobMissiles : EntityManager.getMobMissilesList()) {
+                if (IntersectHelpers.isCollide(this, mobMissiles)) {
+                    this.HP -= 10;
+                    lastHitProcessed = System.currentTimeMillis();
+                    EntityManager.removeEntity(mobMissiles);
+                    break;
+                }
+            }
         }
     }
 

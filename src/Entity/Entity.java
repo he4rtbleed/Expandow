@@ -11,6 +11,11 @@ public abstract class Entity {
     protected Point collisionSize; //충돌 체크를 위한 size
     protected float speed = 1.0f; //엔티티의 움직임 속도
     public Point direction = new Point();
+    protected long createdTick = -1;
+
+    public Entity() {
+        createdTick = System.currentTimeMillis();
+    }
 
     public Point getAbsolutePosition() {
         return this.absPos;

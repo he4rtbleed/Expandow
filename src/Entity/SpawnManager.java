@@ -2,6 +2,7 @@ package Entity;
 
 import Area.MainArea;
 import Entity.Mobs.Circle;
+import Entity.Mobs.Octagon;
 import Entity.Mobs.Triangle;
 import Utils.Enums.Edge;
 import org.w3c.dom.css.Rect;
@@ -37,7 +38,8 @@ public class SpawnManager {
 
             switch (random.nextInt(0, 4)) {
                 case 0 -> EntityManager.addEntity(new Circle(getRandomSpawnPos()));
-                case 1,2,3 -> EntityManager.addEntity(new Triangle(getRandomSpawnPos()));
+                case 1 -> EntityManager.addEntity(new Triangle(getRandomSpawnPos()));
+                case 2 -> EntityManager.addEntity(new Octagon(getRandomSpawnPos()));
                 default -> {
                 }
             }
