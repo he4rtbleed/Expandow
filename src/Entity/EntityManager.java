@@ -58,6 +58,9 @@ public class EntityManager {
         if (isGamePaused)
             return;
 
+        if (Player.getInstance().getHP() == 0)
+            isGamePaused = true;
+
         // 엔티티리스트에 등록된 엔티티들의 onTick 콜백 호출.
         for (Entity entity : entityList) {
             entity.onTick();
