@@ -56,8 +56,8 @@ public class MainArea extends Area {
     @Override
     public void paint(Graphics _g) {
         //JFrame 을 상속받은 Area클래스를 상속받았으므로 paint 메소드 오버라이딩 가능
-        updateAbsolutePositionOfArea();
-        updateWindowSize();
+        updateAbsolutePositionOfArea(); //스크린상의 절대좌표 업데이트
+        updateWindowSize(); //창의 크기 업데이트
 
         //모니터의 크기 가져옴
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -66,8 +66,9 @@ public class MainArea extends Area {
         Image img = createImage(screenSize.width, screenSize.height);
         Graphics g = img.getGraphics();
         g.clearRect(0, 0, screenSize.width, screenSize.height);
+        //모니터의 크기만큼 비트맵을 지움
 
-        //영역 안의 엔티티 페인팅
+        //영역 안의 엔티티를 방금 만든 비트맵에 그려줌
         for (Entity entity : EntityManager.getEntityList()) {
             boolean inArea = IntersectHelpers.isPointInRectangle(this.absBounds, entity.getAbsolutePosition());
             if (inArea) {
@@ -75,15 +76,16 @@ public class MainArea extends Area {
             }
         }
 
+        //플레이어 정보 그려줌
         if (Player.getInstance() != null) {
             g.setColor(Color.BLACK);
             g.drawString("POINT: " + Player.getInstance().getPoint(), absBounds.x + 10, absBounds.y + 50);
             g.drawString("HP: " + Player.getInstance().getHP() + "/" + Player.getInstance().getMaxHp(), absBounds.x + absBounds.width - 100, absBounds.y + 50);
         }
 
-        // _g 가 swing 프레임의 그래픽 객체이고 img 는 따로 만든 비트맵
+        // _ 가붙은 g객체가 swing 프레임의 그래픽 객체이고 img(g) 는 위에서 따로 만든 비트맵
         // img 비트맵은 모니터 크기와 같음
-        // 즉 swing 프레임에
+        // 최종적으로 모든 엔티티와 정보를 그려준 비트맵을 swing 프레임에 그려줌
         _g.drawImage(img, -absBounds.getLocation().x, -absBounds.getLocation().y, null);
 
         repaint();
