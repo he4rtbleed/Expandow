@@ -23,7 +23,7 @@ public class Game {
         EntityManager.addEntity(Player.getInstance()); //엔티티 리스트에 플레이어 추가
 
         new Timer(10, evt -> EntityManager.onTick()).start(); //EntityManager 클래스의 onTick 정적 메서드 호출 쓰레드 생성 (0.01ms 마다 호출)
-        new Timer(100, evt -> mainArea.areaReducer()).start();
+        new Timer(1, evt -> mainArea.validateArea()).start();
         new Timer(100, evt -> SpawnManager.onTick()).start();
     }
 }

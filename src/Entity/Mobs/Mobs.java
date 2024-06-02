@@ -43,7 +43,7 @@ public abstract class Mobs extends Entity implements Movable {
         for (Entity projectile : EntityManager.getProjectilesList()) {
             if (projectile.getClass() == PlayerMissile.class) {
                 if (IntersectHelpers.isCollide(this, projectile)) {
-                    this.HP -= 10;
+                    this.HP -= Player.getInstance().getAttackDamage();
                     lastHitProcessed = System.currentTimeMillis();
                     EntityManager.removeEntity(projectile);
 

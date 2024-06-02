@@ -1,5 +1,6 @@
 package Entity;
 
+import Area.ShopArea;
 import Utils.CoordinateConvertHelper;
 
 import java.awt.*;
@@ -20,6 +21,7 @@ public class PlayerController extends KeyAdapter implements MouseListener, Mouse
             case KeyEvent.VK_S -> this.targetEntity.keyMapped[1] = true;
             case KeyEvent.VK_A -> this.targetEntity.keyMapped[2] = true;
             case KeyEvent.VK_D -> this.targetEntity.keyMapped[3] = true;
+            case KeyEvent.VK_SPACE -> ShopArea.getInstance().showShop();
             default -> { }
         }
     }

@@ -17,14 +17,14 @@ public class Octagon extends Mobs {
     public Octagon(Point pos) {
         this.absPos = pos;
         this.collisionSize = new Point(40, 40);
-        this.rewardPoint = 20;
-        this.HP = 60;
+        this.rewardPoint = 5;
+        this.HP = 50 + Player.getInstance().getTotalPoints() / 40;
         this.speed = 0;
     }
 
     private void checkAndFireMissile() {
         if (System.currentTimeMillis() > nextMissileFire) {
-            nextMissileFire = System.currentTimeMillis() + random.nextInt(2000, 4000);
+            nextMissileFire = System.currentTimeMillis() + random.nextInt(3000, 5000);
 
             OctagonMissile missile = new OctagonMissile(this,
                     CoordinateConvertHelper.GetAngleFromTwoPoints(this.absPos, Player.getInstance().getAbsolutePosition()));

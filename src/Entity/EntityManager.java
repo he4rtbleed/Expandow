@@ -9,6 +9,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Utils.GameConditions.isGamePaused;
+
 public class EntityManager {
     private static List<Entity> entityList = new ArrayList<Entity>();
     private static List<Entity> toAdd = new ArrayList<Entity>();
@@ -53,6 +55,9 @@ public class EntityManager {
     }
 
     public static void onTick() {
+        if (isGamePaused)
+            return;
+
         // 엔티티리스트에 등록된 엔티티들의 onTick 콜백 호출.
         for (Entity entity : entityList) {
             entity.onTick();
@@ -62,8 +67,11 @@ public class EntityManager {
                 if (entity.getClass() == PlayerMissile.class) {
 
                     Edge hittedEdge = IntersectHelpers.getEdge(MainArea.getInstance().getAbsBounds(), entity.getAbsolutePosition());
-                    if (hittedEdge != Edge.DEFAULT)
-                        MainArea.getInstance().addExpandAmount(hittedEdge, Player.getInstance().getExpandForce());
+                    if (hittedEdge != Edge.DEFAULT) {
+                        //밸런스를 위해 총점수 100당 1씩 감소
+                        int balancePathcer = Player.getInstance().getTotalPoints() / 100;
+                        MainArea.getInstance().addExpandAmount(hittedEdge, Player.getInstance().getExpandForce() - balancePathcer);
+                    }
 
                     removeEntity(entity);
                     continue;

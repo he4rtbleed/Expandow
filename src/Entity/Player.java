@@ -16,19 +16,25 @@ public class Player extends Entity implements Movable {
 
 
     private int point = 0; //업그레이드를 위한 돈 변수 정의
+    private int totalPoints = 0; //난이도조절을위한 포인트
 
 
     // 밑에서부터 업그레이드 가능 속성들
     private int maxHp = 100;
-    private float attackSpeed = 0.3f; //0.1 이면 0.1s 즉 100ms 마다 미사일 발사
-    private int expandForce = 15; //영역확장력
+    private float attackSpeed = 0.4f; //0.1 이면 0.1s 즉 100ms 마다 미사일 발사
+    private int expandForce = 25; //영역확장력
+    private int attackDamage = 10;
+    private int multiShot = 1;
 
     public int getPoint() {
         return point;
     }
 
+    public int getTotalPoints() { return totalPoints; }
+
     public void addPoint(int amount) {
         this.point += amount;
+        this.totalPoints += amount;
     }
 
     public int getMaxHp() {
@@ -40,8 +46,19 @@ public class Player extends Entity implements Movable {
     }
 
     public int getExpandForce() {
-        return expandForce;
+        return expandForce / multiShot;
     }
+
+    public void addExpandForce(int amount) { this.expandForce += amount; }
+
+    public void setAttackSpeed(float speed) { this.attackSpeed = speed; }
+
+    public int getAttackDamage() { return this.attackDamage; }
+    public void addAttackDamage(int amount) { this.attackDamage += amount; }
+
+    public void addMoveSpeed(float amount) { this.speed += amount; }
+
+    public void addMultiShot(int amount) { this.multiShot += amount; }
 
     //업그레이드 가능 속성 끝
 
@@ -50,7 +67,7 @@ public class Player extends Entity implements Movable {
     public Player(Point pos) {
         this.absPos = pos;
         this.collisionSize = new Point(30, 30);
-        this.speed = 2.f;
+        this.speed = 3.f;
         Instance = this;
     }
 
@@ -63,9 +80,13 @@ public class Player extends Entity implements Movable {
         if (mousePos.x != Integer.MAX_VALUE && mousePos.y != Integer.MAX_VALUE) {
             if (System.currentTimeMillis() - lastMissileFired > attackSpeed * 1000.f) { //최근 발사 이후 공격속도sec 만큼 지나고 나서 다음 미사일 발사
                 lastMissileFired = System.currentTimeMillis();
-                PlayerMissile missile = new PlayerMissile(this,
-                        CoordinateConvertHelper.GetAngleFromTwoPoints(this.absPos, this.mousePos));
-                EntityManager.addEntity(missile);
+                for (int i = 0; i < multiShot; i++) {
+                    Point tempStartPos = new Point(absPos.x + 5 * i, absPos.y + 5 * i);
+                    Point tempPos = new Point(mousePos.x + 5 * i, mousePos.y + 5 * i);
+                    PlayerMissile missile = new PlayerMissile(this, tempStartPos,
+                            CoordinateConvertHelper.GetAngleFromTwoPoints(tempStartPos, tempPos));
+                    EntityManager.addEntity(missile);
+                }
             }
         }
     }

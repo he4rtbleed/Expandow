@@ -8,6 +8,8 @@ import Utils.IntersectHelpers;
 
 import java.awt.*;
 
+import static Utils.GameConditions.isGamePaused;
+
 public class MainArea extends Area {
     private static MainArea instance;
 
@@ -21,10 +23,13 @@ public class MainArea extends Area {
 
     boolean isInitialized = false;
 
-    int[] accumulatedExpandAmount = { 0, 0, 0, 0 };
+    int[] accumulatedExpandAmount = { 0, 0, 0, 0, 0 };
+    int[] targetExpandAmount = {0, 0, 0, 0, 0 };
+
+    long lastAreaReducedTick = -1;
 
     public void addExpandAmount(Edge edge, int amount) {
-        accumulatedExpandAmount[edge.ordinal()] += amount;
+        targetExpandAmount[edge.ordinal()] += amount;
     }
 
     public MainArea() {
@@ -41,6 +46,11 @@ public class MainArea extends Area {
         updateWindowSize();
 
         isInitialized = true;
+    }
+
+    public int getAreaOfSquare() {
+        Dimension pt = getSize();
+        return pt.width * pt.height;
     }
 
     @Override
@@ -65,44 +75,6 @@ public class MainArea extends Area {
             }
         }
 
-        // 확장/축소 로직
-        boolean boundsChanged = false;
-
-        if (accumulatedExpandAmount[Edge.BOTTOM.ordinal()] != 0) {
-            absBounds.height += accumulatedExpandAmount[Edge.BOTTOM.ordinal()];
-            accumulatedExpandAmount[Edge.BOTTOM.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.BOTTOM.ordinal()]);
-            boundsChanged = true;
-        }
-        if (accumulatedExpandAmount[Edge.TOP.ordinal()] != 0) {
-            absBounds.y -= accumulatedExpandAmount[Edge.TOP.ordinal()];
-            absBounds.height += accumulatedExpandAmount[Edge.TOP.ordinal()];
-            accumulatedExpandAmount[Edge.TOP.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.TOP.ordinal()]);
-            boundsChanged = true;
-        }
-        if (accumulatedExpandAmount[Edge.LEFT.ordinal()] != 0) {
-            absBounds.x -= accumulatedExpandAmount[Edge.LEFT.ordinal()];
-            absBounds.width += accumulatedExpandAmount[Edge.LEFT.ordinal()];
-            accumulatedExpandAmount[Edge.LEFT.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.LEFT.ordinal()]);
-            boundsChanged = true;
-        }
-        if (accumulatedExpandAmount[Edge.RIGHT.ordinal()] != 0) {
-            absBounds.width += accumulatedExpandAmount[Edge.RIGHT.ordinal()];
-            accumulatedExpandAmount[Edge.RIGHT.ordinal()] = adjustAmount(accumulatedExpandAmount[Edge.RIGHT.ordinal()]);
-            boundsChanged = true;
-        }
-
-        // 최소 크기 유지
-        if (absBounds.width < 300) {
-            absBounds.width = 300;
-        }
-        if (absBounds.height < 200) {
-            absBounds.height = 200;
-        }
-
-        if (boundsChanged) {
-            setBounds(absBounds.x, absBounds.y, absBounds.width, absBounds.height);
-        }
-
         if (Player.getInstance() != null) {
             g.setColor(Color.BLACK);
             g.drawString("POINT: " + Player.getInstance().getPoint(), absBounds.x + 10, absBounds.y + 50);
@@ -117,17 +89,50 @@ public class MainArea extends Area {
         repaint();
     }
 
-    private int adjustAmount(int amount) {
-        if (amount < 0) {
-            return Math.min(0, amount + 10);
-        } else {
-            return Math.max(0, amount - 10);
-        }
-    }
+    public void validateArea() {
+        if (isGamePaused)
+            return;
 
-    public void areaReducer() {
-        for (int i = 0; i < 4; i++) {
-            accumulatedExpandAmount[i] -= 1;
+        if (System.currentTimeMillis() - lastAreaReducedTick > 100 - getAreaOfSquare() / 10000) {
+            lastAreaReducedTick = System.currentTimeMillis();
+            for (int i = 0; i < 4; i++) {
+                targetExpandAmount[i] -= 1;
+            }
+        }
+
+        // 확장/축소 로직
+        boolean boundsChanged = false;
+
+        for (Edge edge : Edge.values()) {
+            int index = edge.ordinal();
+            if (accumulatedExpandAmount[index] != targetExpandAmount[index]) {
+                int changeAmount = (int) ((targetExpandAmount[index] - accumulatedExpandAmount[index]) * 0.2);
+                accumulatedExpandAmount[index] += changeAmount;
+                if (edge == Edge.BOTTOM) {
+                    absBounds.height += changeAmount;
+                } else if (edge == Edge.TOP) {
+                    absBounds.y -= changeAmount;
+                    absBounds.height += changeAmount;
+                } else if (edge == Edge.LEFT) {
+                    absBounds.x -= changeAmount;
+                    absBounds.width += changeAmount;
+                } else if (edge == Edge.RIGHT) {
+                    absBounds.width += changeAmount;
+                }
+                boundsChanged = true;
+            }
+        }
+
+        // 최소 크기 유지
+        if (absBounds.width < 300) {
+            absBounds.width = 300;
+        }
+        if (absBounds.height < 200) {
+            absBounds.height = 200;
+        }
+
+        if (boundsChanged) {
+            setBounds(absBounds.x, absBounds.y, absBounds.width, absBounds.height);
         }
     }
 }

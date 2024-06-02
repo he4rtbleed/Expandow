@@ -5,19 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5d71e23-4da8-4862-a246-d165cc71bcde" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/src/Entity/Mobs/OctagonMissile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Area/ShopArea.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Utils/GameConditions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Area/MainArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Area/MainArea.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/EntityManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Mobs/Circle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Mobs/Circle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Mobs/Mobs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Mobs/Mobs.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Mobs/Octagon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Mobs/Octagon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Mobs/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Mobs/Triangle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/PlayerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/PlayerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/PlayerMissile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/PlayerMissile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Projectiles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Projectiles.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/SpawnManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/SpawnManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +142,8 @@
       <workItem from="1716443574259" duration="62000" />
       <workItem from="1717051548966" duration="25420000" />
       <workItem from="1717162577591" duration="343000" />
-      <workItem from="1717163325505" duration="3506000" />
+      <workItem from="1717163325505" duration="17012000" />
+      <workItem from="1717292407360" duration="6323000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <option name="closed" value="true" />

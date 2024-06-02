@@ -5,11 +5,11 @@ import java.awt.geom.AffineTransform;
 
 public class PlayerMissile extends Projectiles {
     double angle;
-    double speed = 5.f;
+    double speed = 10.f;
 
-    public PlayerMissile(Entity owner, double angle) {
+    public PlayerMissile(Entity owner, Point startAbsPos, double angle) {
         super(owner);
-        this.startAbsPos = (Point) owner.absPos.clone();
+        this.startAbsPos = startAbsPos;
         this.absPos = (Point) this.startAbsPos.clone();
         this.collisionSize = new Point(15, 5);
         this.angle = angle;

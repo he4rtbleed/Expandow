@@ -1,5 +1,7 @@
 package Entity.Mobs;
 
+import Entity.Player;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
@@ -8,7 +10,8 @@ public class Triangle extends Mobs {
     public Triangle(Point pos) {
         this.absPos = pos;
         this.collisionSize = new Point(35, 35);
-        this.rewardPoint = 10;
+        this.rewardPoint = 3;
+        this.HP = 20 + Player.getInstance().getTotalPoints() / 40;
     }
 
     @Override
